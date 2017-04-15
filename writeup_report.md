@@ -13,7 +13,7 @@ The project was executed using *Spyder* development suite as a part of the *Anac
 
 The methodology adopted for *Behavioral Cloning Project* is as follows. Each of these steps is described in greater detail in the following sections.
 1. [Strategy for collecting training data using the simulator on Track 1](#1-data-collection)
-2. [Data augmentation techniques](#12-training-data-filtering,-augmentation-and-splitting)
+2. [Data augmentation techniques](#12-training-data-filtering-augmentation-and-splitting)
 3. [Build NVIDIA CNN in Keras to predict steering angle based on input image](#21-model-architecture)
 4. [Train NVIDIA CNN network using split training and validation data](#23-model-training)
 5. [Tested the model successfully to drive around Track 1](#3-using-trained-model-to-drive-in-autonomous-mode)
