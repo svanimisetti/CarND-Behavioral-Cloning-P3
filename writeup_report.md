@@ -8,7 +8,7 @@ In this submission for ***Behavioral Cloning Project*** the following topics hav
 
 The project was executed using *Spyder* development suite as a part of the *Anaconda* python environment rather than an IPython notebook as it has features such as variable inspector, set breakpoints, use block mode execution. A quick snapshot of the development environment during project development is shown below. If the reviewer does not have access to the *Spyder* IDE, relevant cells of the script can be commented during execution.
 
-![Spyder Setup](.\writeup_media\Spyder_Setup.PNG)
+![Spyder Setup](writeup_media/Spyder_Setup.PNG)
 
 ## Behavioral Cloning Methodology
 
