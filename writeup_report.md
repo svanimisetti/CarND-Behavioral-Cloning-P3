@@ -12,13 +12,13 @@ The project was executed using *Spyder* development suite as a part of the *Anac
 ## Behavioral Cloning Methodology
 
 The methodology adopted for *Behavioral Cloning Project* is as follows. Each of these steps is described in greater detail in the following sections.
-1. [Strategy for collecting training data using the simulator on Track 1](#1.-data-collection)
-2. [Data augmentation techniques](#1.2.-training-data-filtering,-augmentation-and-splitting)
-3. [Build NVIDIA CNN in Keras to predict steering angle based on input image](#2.1.-model-architecture)
-4. [Train NVIDIA CNN network using split training and validation data](#2.3.-model-training)
-5. [Tested the model successfully to drive around Track 1](#3.-using-trained-model-to-drive-in-autonomous-mode)
-6. [Extended training data from Track 2 and strategy to combine data with Track 1](#4.-extending-to-track-2)
-7. [Challenges in generalizing the model for both Track 1 and Track 2](#4.-extending-to-track-2)
+1. [Strategy for collecting training data using the simulator on Track 1](#1-data-collection)
+2. [Data augmentation techniques](#12-training-data-filtering,-augmentation-and-splitting)
+3. [Build NVIDIA CNN in Keras to predict steering angle based on input image](#21-model-architecture)
+4. [Train NVIDIA CNN network using split training and validation data](#23-model-training)
+5. [Tested the model successfully to drive around Track 1](#3-using-trained-model-to-drive-in-autonomous-mode)
+6. [Extended training data from Track 2 and strategy to combine data with Track 1](#4-extending-to-track-2)
+7. [Challenges in generalizing the model for both Track 1 and Track 2](#4-extending-to-track-2)
 
 
 ### 1. Data Collection
@@ -33,7 +33,7 @@ In order to understand the influence of controller choice, three training data c
 
 Note that the above histogram, the bin counts are shown using a logarithmic scale. It can be seen that the the keyboard method has a large skew in the steering angles. More precisely, the steering angles are saturated at $$0.0$$ and at around $$\pm 0.5$$ as shown using red encircled regions. This is expected from the keyboard steering method, as the input from the user can only be done in discreet bursts. In contrast, the mouse and xbox360 controller input methods are more spread-out in the histogram as low/intermediate steering input can be sustained for a longer duration. This is representative of how a human would typically drive a car. Based on this assessment, the remainder of data collection was done using an Xbox360 gamepad controller. In total, for track 1, about 7500 image and steering input points were collected for training purpose.
 
-####1.2. Training data filtering, augmentation and splitting
+#### 1.2. Training data filtering, augmentation and splitting
 
 The image and steering input data were read from the database created during the training session in the simulator. The following data filtering and augmentation steps were used.
 * Images with corresponding steering input less than 1% (0.01) were ignored. This was to remove bias in the trained model for driving straight.
@@ -42,7 +42,7 @@ The image and steering input data were read from the database created during the
 * Upon filtering and augmenting the final training set size was around 9,200 images.
 * The augmented data was shuffled and split into training and validation datasets with 80% and 20% split.
 
-####1.3. Optional training generator
+#### 1.3. Optional training generator
 A training generator was defined to batch the data. However, it was found that the training data could be sent to the GPU in a single step. Hence, to speed-up the training process, the training generator function was ***not*** used.
 ```python
 def generator(X_data, y_data, batch_size=32):
@@ -69,7 +69,7 @@ history_object = model.fit_generator(train_generator,
                                      verbose=1)
 ```
 
-###2. Model definition and usage
+### 2. Model definition and usage
 
 The NVIDIA CNN model architecture was implement for this project. The implementation of the model and the training pipeline can be seen in lines 79-101 in model.py file. The NVIDIA CNN model has been very successful in the NVIDIA self-driving car implementation.
 
@@ -135,7 +135,7 @@ Non-trainable params: 0
 ____________________________________________________________________________________________________
 ```
 
-####2.2. Optimization setup
+#### 2.2. Optimization setup
 
 The model is compiled use the `mse` loss function and `adam` optimizer. Further, the fitting is carried out over 6 training epochs using the previously split training and validation data. The training pipeline is executed over 6 epochs in about 10 minutes on the laptop. Learning rate was not tuned as `adam` optimizer was used.
 
@@ -151,7 +151,7 @@ The history of training and validation loss is shown in the following graph. It 
 
 ![training_convergence_track1](writeup_media/training_convergence_track1.png)
 
-####2.4. Model usage
+#### 2.4. Model usage
 
 The model is saved to disk for reuse. The HDF file saved to the disk contains both the network definition as well as the associated weights. The model HDF file can be loaded from disk and used during the autonomous driving sessions.
 
@@ -169,7 +169,7 @@ runfile('drive.py', args='model_track1.h5')
 #runfile('drive.py', args='model_track1.h5 video_track1')
 ```
 
-###3. Using trained model to drive in autonomous mode
+### 3. Using trained model to drive in autonomous mode
 
 The trained model is used to drive the car on track 1 in autonomous mode. The following animated GIF file shows the screencast of the autonomous driving session around track 1. Optionally, the [video for track 1](writeup_media/video_track1.mp4) from the `drive.py` script is also recorded.
 
