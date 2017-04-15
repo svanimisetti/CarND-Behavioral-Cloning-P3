@@ -2,7 +2,6 @@
 
 In this submission for ***Behavioral Cloning Project*** the following topics have been covered. Key steps corresponding to each stage of the project execution have been summarized. Where applicable, images or animations are presented to guide the reviewer.
 
-{:toc}
 
 ## Development Environment Setup
 
@@ -30,7 +29,7 @@ Training data was collected using centerline driving on track 1 for two laps in 
 
 In order to understand the influence of controller choice, three training data collection sessions were run. Three controller options available in the simulator were tested - (i) keyboard arrows (ii) mouse drag and (iii) Xbox 360 gamepad. This is crucial information as the driver behavior cloned into the model will include the controller behavior. In the following histogram chart, a summary of the steering angles recorded for two forwards laps of track 1 using the three controller are shown.
 
-![controller_effect](C:\Users\Sampath\Downloads\GitHub\CarND\CarND-Behavioral-Cloning-P3\writeup_media\controller_effect.png)
+![controller_effect](writeup_media/controller_effect.png)
 
 Note that the above histogram, the bin counts are shown using a logarithmic scale. It can be seen that the the keyboard method has a large skew in the steering angles. More precisely, the steering angles are saturated at $$0.0$$ and at around $$\pm 0.5$$ as shown using red encircled regions. This is expected from the keyboard steering method, as the input from the user can only be done in discreet bursts. In contrast, the mouse and xbox360 controller input methods are more spread-out in the histogram as low/intermediate steering input can be sustained for a longer duration. This is representative of how a human would typically drive a car. Based on this assessment, the remainder of data collection was done using an Xbox360 gamepad controller. In total, for track 1, about 7500 image and steering input points were collected for training purpose.
 
@@ -78,7 +77,7 @@ The NVIDIA CNN model architecture was implement for this project. The implementa
 
 An overview of the model is shown below.
 
-![cnn-architecture-624x890](C:\Users\Sampath\Downloads\GitHub\CarND\CarND-Behavioral-Cloning-P3\writeup_media\cnn-architecture-337x480.png)
+![cnn-architecture-624x890](writeup_media/cnn-architecture-337x480.png)
 
 
 
@@ -150,7 +149,7 @@ model.fit(X_train, y_train, validation_data=(X_valid,y_valid),
 
 The history of training and validation loss is shown in the following graph. It can be seen that the overall loss for training and validation set is low (<0.1). Furthermore, both training and validation losses reduce after each epoch. This is a sign that the model is not overfitting and is generalizing the representation of the training data well.
 
-![training_convergence_track1](C:\Users\Sampath\Downloads\GitHub\CarND\CarND-Behavioral-Cloning-P3\writeup_media\training_convergence_track1.png)
+![training_convergence_track1](writeup_media/training_convergence_track1.png)
 
 ####2.4. Model usage
 
@@ -172,9 +171,9 @@ runfile('drive.py', args='model_track1.h5')
 
 ###3. Using trained model to drive in autonomous mode
 
-The trained model is used to drive the car on track 1 in autonomous mode. The following animated GIF file shows the screencast of the autonomous driving session around track 1. Optionally, the [video for track 1](.\writeup_media\video_track1.mp4) from the `drive.py` script is also recorded.
+The trained model is used to drive the car on track 1 in autonomous mode. The following animated GIF file shows the screencast of the autonomous driving session around track 1. Optionally, the [video for track 1](writeup_media/video_track1.mp4) from the `drive.py` script is also recorded.
 
-![screencast_track1_c4x](C:\Users\Sampath\Downloads\GitHub\CarND\CarND-Behavioral-Cloning-P3\writeup_media\screencast_track1_c4x.gif)
+![screencast_track1_c4x](writeup_media/screencast_track1_c4x.gif)
 
 
 
@@ -182,11 +181,11 @@ The trained model is used to drive the car on track 1 in autonomous mode. The fo
 
 The trained model from track 1 was could not be used as-is for track 2 as the model had difficulty in negotiating sharp turns and bends in quick successions. This is primarily due to the fundamental differences between the two tracks. Analysis of the two tracks using the steering data revels that track 1 is heavily biased towards straight-line driving, whereas track 2 is heavily biased towards end-to-end steeping input. The following graphs shows this distinction. Note in track 1, there is five time more training data at $$0.0$$ input than track 2. Also, there is significantly more input in track 2 in the region of $$\pm 0.5-1.0$$ steering input.
 
-![track2_diff](C:\Users\Sampath\Downloads\GitHub\CarND\CarND-Behavioral-Cloning-P3\writeup_media\track2_diff.png)
+![track2_diff](writeup_media/track2_diff.png)
 
-In order to generalize, the 20% training data from track 1 and 80% data from track 2 was used to train the model once again. The starting weights were used from original track 1 trained model. This trained model worked very well, and is able to complete multiple laps of track 2. The following animated GIF file shows the screencast of the trained model driving track 2 in autonomous mode. Optionally, the [video for track 2](.\writeup_media\video_track2.mp4) from the `drive.py` script is also recorded.
+In order to generalize, the 20% training data from track 1 and 80% data from track 2 was used to train the model once again. The starting weights were used from original track 1 trained model. This trained model worked very well, and is able to complete multiple laps of track 2. The following animated GIF file shows the screencast of the trained model driving track 2 in autonomous mode. Optionally, the [video for track 2](writeup_media/video_track2.mp4) from the `drive.py` script is also recorded.
 
-![screencast_track2_c4x](C:\Users\Sampath\Downloads\GitHub\CarND\CarND-Behavioral-Cloning-P3\writeup_media\screencast_track2_c4x.gif)
+![screencast_track2_c4x](writeup_media/screencast_track2_c4x.gif)
 
 ## Concluding Remarks
 
