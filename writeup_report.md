@@ -79,9 +79,7 @@ An overview of the model is shown below.
 
 ![cnn-architecture-624x890](writeup_media/cnn-architecture-337x480.png)
 
-
-
-The NVIDIA training pipeline contains 5 convolutional layers and 3 fully-connected layers. The input image is cropped to remove 70 and 25 pixels from top and bottom portion of the image, respectively. This aggressive cropping of sky/trees and car hood was found to have beneficial influence on reliability of mapping image to steering angle. Further, the input image is normalized using the `Lambda` function. The following lines show how the training pipeline was implemented using Keras.
+The NVIDIA training pipeline contains 5 convolutional layers and 3 fully-connected layers. To prevent overfitting, dropout layers (10% rate) were added for 2 out of 3 fully-connected layers. The input image is cropped to remove 70 and 25 pixels from top and bottom portion of the image, respectively. This aggressive cropping of sky/trees and car hood was found to have beneficial influence on reliability of mapping image to steering angle. Further, the input image is normalized using the `Lambda` function. The following lines show how the training pipeline was implemented using Keras.
 
 ```python
 model = Sequential()
@@ -94,8 +92,10 @@ model.add(Convolution2D(64,3,3,activation="relu"))
 model.add(Convolution2D(64,3,3,activation="relu"))
 model.add(Flatten())
 model.add(Dense(100))
+model.add(Dropout(0.1))
 model.add(Dense(50))
 model.add(Dense(10))
+model.add(Dropout(0.1))
 model.add(Dense(1))	
 ```
 
@@ -105,29 +105,33 @@ As seen above, the convolutional layers use 5x5 and 3x3 filter sizes and include
 ____________________________________________________________________________________________________
 Layer (type)                     Output Shape          Param #     Connected to                     
 ====================================================================================================
-cropping2d_1 (Cropping2D)        (None, 65, 320, 3)    0           cropping2d_input_1[0][0]         
+cropping2d_8 (Cropping2D)        (None, 65, 320, 3)    0           cropping2d_input_12[0][0]        
 ____________________________________________________________________________________________________
-lambda_1 (Lambda)                (None, 65, 320, 3)    0           cropping2d_1[0][0]               
+lambda_8 (Lambda)                (None, 65, 320, 3)    0           cropping2d_8[0][0]               
 ____________________________________________________________________________________________________
-convolution2d_1 (Convolution2D)  (None, 31, 158, 24)   1824        lambda_1[0][0]                   
+convolution2d_20 (Convolution2D) (None, 31, 158, 24)   1824        lambda_8[0][0]                   
 ____________________________________________________________________________________________________
-convolution2d_2 (Convolution2D)  (None, 14, 77, 36)    21636       convolution2d_1[0][0]            
+convolution2d_21 (Convolution2D) (None, 14, 77, 36)    21636       convolution2d_20[0][0]           
 ____________________________________________________________________________________________________
-convolution2d_3 (Convolution2D)  (None, 5, 37, 48)     43248       convolution2d_2[0][0]            
+convolution2d_22 (Convolution2D) (None, 5, 37, 48)     43248       convolution2d_21[0][0]           
 ____________________________________________________________________________________________________
-convolution2d_4 (Convolution2D)  (None, 3, 35, 64)     27712       convolution2d_3[0][0]            
+convolution2d_23 (Convolution2D) (None, 3, 35, 64)     27712       convolution2d_22[0][0]           
 ____________________________________________________________________________________________________
-convolution2d_5 (Convolution2D)  (None, 1, 33, 64)     36928       convolution2d_4[0][0]            
+convolution2d_24 (Convolution2D) (None, 1, 33, 64)     36928       convolution2d_23[0][0]           
 ____________________________________________________________________________________________________
-flatten_1 (Flatten)              (None, 2112)          0           convolution2d_5[0][0]            
+flatten_3 (Flatten)              (None, 2112)          0           convolution2d_24[0][0]           
 ____________________________________________________________________________________________________
-dense_1 (Dense)                  (None, 100)           211300      flatten_1[0][0]                  
+dense_9 (Dense)                  (None, 100)           211300      flatten_3[0][0]                  
 ____________________________________________________________________________________________________
-dense_2 (Dense)                  (None, 50)            5050        dense_1[0][0]                    
+dropout_5 (Dropout)              (None, 100)           0           dense_9[0][0]                    
 ____________________________________________________________________________________________________
-dense_3 (Dense)                  (None, 10)            510         dense_2[0][0]                    
+dense_10 (Dense)                 (None, 50)            5050        dropout_5[0][0]                  
 ____________________________________________________________________________________________________
-dense_4 (Dense)                  (None, 1)             11          dense_3[0][0]                    
+dropout_6 (Dropout)              (None, 50)            0           dense_10[0][0]                   
+____________________________________________________________________________________________________
+dense_11 (Dense)                 (None, 10)            510         dropout_6[0][0]                  
+____________________________________________________________________________________________________
+dense_12 (Dense)                 (None, 1)             11          dense_11[0][0]                   
 ====================================================================================================
 Total params: 348,219
 Trainable params: 348,219
@@ -147,9 +151,9 @@ model.fit(X_train, y_train, validation_data=(X_valid,y_valid),
 
 #### 2.3. Model training
 
-The history of training and validation loss is shown in the following graph. It can be seen that the overall loss for training and validation set is low (<0.1). Furthermore, both training and validation losses reduce after each epoch. This is a sign that the model is not overfitting and is generalizing the representation of the training data well.
+The history of training and validation loss is shown in the following graph. It can be seen that the overall loss for training and validation set is low (<0.1). Furthermore, both training and validation losses reduce after each epoch. This is a sign that the model is not overfitting and is generalizing the representation of the training data well. One interesting point to note is that the dropout layers with 10% rate that were used to prevent overfitting, only showed a marginal improvement in the overall training process. Any attempts to increase the dropout rate beyond 10% result in increase in training loss after the 3rd epoch.
 
-![training_convergence_track1](writeup_media/training_convergence_track1.png)
+![training_convergence_track1](writeup_media/training_convergence_dropout.png)
 
 #### 2.4. Model usage
 
@@ -171,7 +175,7 @@ runfile('drive.py', args='model_track1.h5')
 
 ### 3. Using trained model to drive in autonomous mode
 
-The trained model is used to drive the car on track 1 in autonomous mode. The following animated GIF file shows the screencast of the autonomous driving session around track 1. Optionally, the [video for track 1](writeup_media/video_track1.mp4) from the `drive.py` script is also recorded.
+The trained model is used to drive the car on track 1 in autonomous mode. The following animated GIF file shows the screencast of the autonomous driving session around track 1. Optionally, the [video for track 1](writeup_media/video_track1.mp4) from the `drive.py` script is also recorded. The [video for track 1 with dropout layers](writeup_media/video_dropout.mp4) indicates that the performance benefit of using the dropout layers is only marginal. In fact, in some of the regions of the track, the car went close to the edge of the road. Nonetheless, the dropout layers are an effective in eliminating overfitting of the model.
 
 ![screencast_track1_c4x](writeup_media/screencast_track1_c4x.gif)
 
