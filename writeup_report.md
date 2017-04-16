@@ -2,6 +2,7 @@
 
 In this submission for ***Behavioral Cloning Project*** the following topics have been covered. Key steps corresponding to each stage of the project execution have been summarized. Where applicable, images or animations are presented to guide the reviewer.
 
+[toc]
 
 ## Development Environment Setup
 
