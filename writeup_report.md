@@ -2,7 +2,21 @@
 
 In this submission for ***Behavioral Cloning Project*** the following topics have been covered. Key steps corresponding to each stage of the project execution have been summarized. Where applicable, images or animations are presented to guide the reviewer.
 
-{:toc}
+- [Overview](#overview)
+- [Development Environment Setup](#development-environment-setup)
+- [Behavioral Cloning Methodology](#behavioral-cloning-methodology)
+  * [1. Data Collection](#1-data-collection)
+    + [1.1. Influence of controller](#11-influence-of-controller)
+    + [1.2. Training data filtering, augmentation and splitting](#12-training-data-filtering--augmentation-and-splitting)
+    + [1.3. Optional training generator](#13-optional-training-generator)
+  * [2. Model definition and usage](#2-model-definition-and-usage)
+    + [2.1. Model architecture](#21-model-architecture)
+    + [2.2. Optimization setup](#22-optimization-setup)
+    + [2.3. Model training](#23-model-training)
+    + [2.4. Model usage](#24-model-usage)
+  * [3. Using trained model to drive in autonomous mode](#3-using-trained-model-to-drive-in-autonomous-mode)
+  * [4. Extending to Track 2](#4-extending-to-track-2)
+- [Concluding Remarks](#concluding-remarks)
 
 ## Development Environment Setup
 
